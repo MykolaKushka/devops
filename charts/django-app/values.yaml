@@ -1,0 +1,20 @@
+image:
+  repository: 431118444370.dkr.ecr.us-west-2.amazonaws.com/lesson-7-ecr
+  tag: "latest"
+  pullPolicy: Always
+
+service:
+  type: LoadBalancer
+  port: 8000
+
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 6
+  targetCPUUtilizationPercentage: 70
+
+env:
+  DEBUG: "False"
+  SECRET_KEY: "supersecret"
+  ALLOWED_HOSTS: "*"
+  DATABASE_URL: "sqlite:///db.sqlite3"
