@@ -1,0 +1,8 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Repository
+metadata:
+  name: django-helm-repo
+  namespace: argocd
+spec:
+  repo: {{ .Values.repositories.django.repoURL }}
+  type: git

@@ -1,0 +1,26 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: {{ .Values.applications.django.name }}
+  namespace: argocd
+spec:
+  project: {{ .Values.applications.django.project }}
+
+  source:
+    repoURL: {{ .Values.applications.django.source.repoURL }}
+    targetRevision: {{ .Values.applications.django.source.targetRevision }}
+    path: {{ .Values.applications.django.source.path }}
+    helm:
+      valueFiles:
+        - values.yaml
+
+  destination:
+    server: {{ .Values.applications.django.destination.server }}
+    namespace: {{ .Values.applications.django.destination.namespace }}
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
