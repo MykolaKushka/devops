@@ -1,0 +1,28 @@
+applications:
+  django:
+    name: django-app
+    namespace: default
+    project: default
+
+    source:
+      repoURL: https://github.com/MykolaKushka/devops.git
+      targetRevision: main
+      path: charts/django-app
+      helm:
+        valueFiles:
+          - values.yaml
+
+    destination:
+      server: https://kubernetes.default.svc
+      namespace: default
+
+    syncPolicy:
+      automated:
+        prune: true
+        selfHeal: true
+      syncOptions:
+        - CreateNamespace=true
+
+repositories:
+  django:
+    repoURL: https://github.com/MykolaKushka/devops.git

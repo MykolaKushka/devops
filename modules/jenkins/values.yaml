@@ -1,0 +1,59 @@
+controller:
+  image:
+    repository: jenkins/jenkins
+    tag: lts-jdk17
+
+  admin:
+    username: admin
+    password: admin
+
+  jenkinsUrlProtocol: http
+
+  installPlugins:
+    - kubernetes
+    - workflow-aggregator
+    - git
+    - credentials-binding
+    - configuration-as-code
+    - job-dsl
+
+  resources:
+    requests:
+      cpu: 100m
+      memory: 512Mi
+    limits:
+      cpu: 1000m
+      memory: 2Gi
+
+  JCasC:
+    enabled: true
+    configScripts:
+      kubernetes-agent: |
+        jenkins:
+          clouds:
+            - kubernetes:
+                name: "kubernetes"
+                serverUrl: "https://kubernetes.default.svc"
+                namespace: "jenkins"
+                containerCapStr: "10"
+                templates:
+                  - name: "kaniko"
+                    label: "kaniko"
+                    serviceAccount: "jenkins"
+                    containers:
+                      - name: kaniko
+                        image: gcr.io/kaniko-project/executor:latest
+                        command:
+                          - /busybox/sh
+                          - -c
+                        args:
+                          - cat
+                        ttyEnabled: true
+
+agent:
+  enabled: false
+
+persistence:
+  enabled: true
+  size: 8Gi
+  storageClass: gp2
